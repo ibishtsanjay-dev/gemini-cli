@@ -187,7 +187,7 @@ export function createMockSettings(
     (overrides['merged'] as Partial<Settings>) || {},
   );
 
-  const mockLoadedSettings = {
+  return {
     system: { settings: {} },
     systemDefaults: { settings: {} },
     user: { settings: {} },
@@ -196,22 +196,4 @@ export function createMockSettings(
     ...overrides,
     merged,
   } as unknown as LoadedSettings;
-
-  if (!mockLoadedSettings.getSnapshot) {
-    mockLoadedSettings.getSnapshot = vi.fn(() => ({
-      system: mockLoadedSettings.system,
-      systemDefaults: mockLoadedSettings.systemDefaults,
-      user: mockLoadedSettings.user,
-      workspace: mockLoadedSettings.workspace,
-      isTrusted: mockLoadedSettings.isTrusted,
-      errors: mockLoadedSettings.errors,
-      merged: mockLoadedSettings.merged,
-    }));
-  }
-
-  if (!mockLoadedSettings.subscribe) {
-    mockLoadedSettings.subscribe = vi.fn(() => vi.fn());
-  }
-
-  return mockLoadedSettings;
 }
