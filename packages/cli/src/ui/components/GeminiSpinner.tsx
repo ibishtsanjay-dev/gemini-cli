@@ -50,13 +50,18 @@ export const GeminiSpinner: React.FC<GeminiSpinnerProps> = ({
   }, [isScreenReaderEnabled]);
 
   const progress = (time % COLOR_CYCLE_DURATION_MS) / COLOR_CYCLE_DURATION_MS;
-  const currentColor = googleGradient.rgbAt(progress).toHexString();
+  const leadingColor = googleGradient.rgbAt(progress).toHexString();
+  // Offset the trailing color by ~10% of the cycle duration
+  const trailingProgress = (progress - 0.1 + 1) % 1;
+  const trailingColor = googleGradient.rgbAt(trailingProgress).toHexString();
 
   return isScreenReaderEnabled ? (
     <Text>{altText}</Text>
   ) : (
-    <Text color={currentColor}>
-      <BrailleAnimation variant={variant} />
-    </Text>
+    <BrailleAnimation
+      variant={variant}
+      color1={trailingColor}
+      color2={leadingColor}
+    />
   );
 };

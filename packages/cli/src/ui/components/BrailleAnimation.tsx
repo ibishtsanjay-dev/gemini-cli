@@ -18,6 +18,10 @@ export type BrailleVariant =
 interface BrailleAnimationProps {
   variant?: BrailleVariant;
   color?: string;
+  /** Individual color for the first character. Overrides 'color' if provided. */
+  color1?: string;
+  /** Individual color for the second character. Overrides 'color' if provided. */
+  color2?: string;
   /** Initial frame index when not controlled. */
   startFrameIndex?: number;
   /** Directly control the frame index for testing. */
@@ -46,6 +50,8 @@ const DOTS = [
 export const BrailleAnimation: FC<BrailleAnimationProps> = ({
   variant = 'Medium',
   color,
+  color1,
+  color2,
   startFrameIndex = 0,
   frameIndex: controlledFrameIndex,
 }) => {
@@ -117,9 +123,9 @@ export const BrailleAnimation: FC<BrailleAnimationProps> = ({
   const char2 = String.fromCharCode(0x2800 + bits2);
 
   return (
-    <Text color={color}>
-      {char1}
-      {char2}
+    <Text>
+      <Text color={color1 ?? color}>{char1}</Text>
+      <Text color={color2 ?? color}>{char2}</Text>
     </Text>
   );
 };
