@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Google LLC
+ * Copyright 2026 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -24,11 +24,24 @@ describe('<CliSpinner />', () => {
   });
 
   it('should not render when showSpinner is false', async () => {
-    const settings = createMockSettings({ ui: { showSpinner: false } });
+    const settings = createMockSettings({
+      merged: {
+        ui: { showSpinner: false },
+      },
+    });
     const { lastFrame, unmount } = await renderWithProviders(<CliSpinner />, {
       settings,
     });
-    expect(lastFrame({ allowEmpty: true })).toBe('');
+    expect(lastFrame({ allowEmpty: true })?.trim()).toBe('');
+    unmount();
+  });
+
+  it('should render BrailleAnimation when useBraille is true', async () => {
+    const { lastFrame, waitUntilReady, unmount } = await renderWithProviders(
+      <CliSpinner useBraille variant="Static" />,
+    );
+    await waitUntilReady();
+    expect(lastFrame()?.trim()).toBe('⢎⡱');
     unmount();
   });
 });

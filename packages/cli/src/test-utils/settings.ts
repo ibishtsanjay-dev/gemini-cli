@@ -70,6 +70,9 @@ export const createMockSettings = (
     loaded._merged = createTestMergedSettings(mergedOverride);
   }
 
+  // @ts-expect-error - re-calculating snapshot after potential merged override
+  loaded._snapshot = loaded.computeSnapshot();
+
   // Assign any function overrides (e.g., vi.fn() for methods)
   for (const key in overrides) {
     if (typeof overrides[key] === 'function') {

@@ -7,20 +7,19 @@
 import type React from 'react';
 import { useState, useEffect, useMemo } from 'react';
 import { Text, useIsScreenReaderEnabled } from 'ink';
-import { CliSpinner } from './CliSpinner.js';
-import type { SpinnerName } from 'cli-spinners';
+import { BrailleAnimation, type BrailleVariant } from './BrailleAnimation.js';
 import { Colors } from '../colors.js';
 import tinygradient from 'tinygradient';
 
 const COLOR_CYCLE_DURATION_MS = 4000;
 
 interface GeminiSpinnerProps {
-  spinnerType?: SpinnerName;
+  variant?: BrailleVariant;
   altText?: string;
 }
 
 export const GeminiSpinner: React.FC<GeminiSpinnerProps> = ({
-  spinnerType = 'dots',
+  variant = 'Composite',
   altText,
 }) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
@@ -57,7 +56,7 @@ export const GeminiSpinner: React.FC<GeminiSpinnerProps> = ({
     <Text>{altText}</Text>
   ) : (
     <Text color={currentColor}>
-      <CliSpinner type={spinnerType} />
+      <BrailleAnimation variant={variant} />
     </Text>
   );
 };
