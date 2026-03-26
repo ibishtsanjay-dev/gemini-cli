@@ -72,6 +72,39 @@ describe('<BrailleAnimation />', () => {
     expect(lastFrame({ allowEmpty: true })?.trim()).toBe('⠈⠑');
   });
 
+  it('should render Composite variant frames (12 ticks/shift)', async () => {
+    const { lastFrame, rerender, waitUntilReady } = await renderWithProviders(
+      <BrailleAnimation variant="Composite" frameIndex={0} />,
+    );
+    await waitUntilReady();
+
+    // index 0: length 2
+    expect(lastFrame({ allowEmpty: true })?.trim()).toBe('⠈⠁');
+
+    await act(async () => {
+      rerender(<BrailleAnimation variant="Composite" frameIndex={11} />);
+    });
+    await waitUntilReady();
+    // index 11: length 2, head shifted 11 mod 8 = 3 (C2.7)
+    // DOTS[3] = {0, 0x40}, DOTS[2] = {0, 0x20}
+    // bits2 = 0x40 | 0x20 = 0x60 (⠠)
+    // Actually the logic is: bits1 |= DOTS[idx].c1; bits2 |= DOTS[idx].c2;
+    // idx for i=0: (11-0+8)%8 = 3. idx for i=1: (11-1+8)%8 = 2.
+    // DOTS[3] = {c1:0, c2:0x40}. DOTS[2] = {c1:0, c2:0x20}.
+    // bits2 = 0x60. char2 = U+2860 (⡠). Wait, 0x2800 + 0x60 = 0x2860.
+    // Let me check braille chart for 0x60.
+    expect(lastFrame({ allowEmpty: true })?.trim()).toBe('⠀⡠');
+
+    await act(async () => {
+      rerender(<BrailleAnimation variant="Composite" frameIndex={12} />);
+    });
+    await waitUntilReady();
+    // index 12: length 3, head shifted 12 mod 8 = 4 (C1.8)
+    // DOTS[4] = {0x80, 0}, DOTS[3] = {0, 0x40}, DOTS[2] = {0, 0x20}
+    // bits1 = 0x80 (⢀), bits2 = 0x40 | 0x20 = 0x60 (⡠)
+    expect(lastFrame({ allowEmpty: true })?.trim()).toBe('⢀⡠');
+  });
+
   it('should handle showSpinner setting', async () => {
     const settings = createMockSettings({
       merged: {

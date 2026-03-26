@@ -68,7 +68,7 @@ export const BrailleAnimation: FC<BrailleAnimationProps> = ({
       return;
 
     const interval = setInterval(() => {
-      setInternalFrameIndex((prev) => (prev + 1) % 48);
+      setInternalFrameIndex((prev) => (prev + 1) % 144);
     }, TICK_MS);
 
     return () => clearInterval(interval);
@@ -94,7 +94,9 @@ export const BrailleAnimation: FC<BrailleAnimationProps> = ({
       }
       case 'Composite': {
         const compositeLengths = [2, 3, 4, 5, 4, 3];
-        return compositeLengths[index % compositeLengths.length];
+        return compositeLengths[
+          Math.floor(index / 12) % compositeLengths.length
+        ];
       }
       default:
         return 3;
