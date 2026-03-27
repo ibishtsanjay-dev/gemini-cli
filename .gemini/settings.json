@@ -1,11 +1,11 @@
 {
-  "experimental": {
-    "plan": true,
-    "extensionReloading": true,
-    "modelSteering": true,
-    "memoryManager": true
-  },
-  "general": {
-    "devtools": true
-  }
+    "theme": "Default",
+    "selectedAuthType" : "oauth-personal",
+
+    "mcpServers": {
+        "teradata-http": {
+            "httpUrl" : "http://127.0.0.1:8001/mcp/",
+            "timeout" : 300000
+        }
+    }
 }
